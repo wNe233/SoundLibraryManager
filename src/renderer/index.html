@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>音效素材库</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="app" class="app-shell">
+      <aside class="sidebar">
+        <div class="brand-block">
+          <div>
+            <p class="eyebrow">LOCAL SOUND LIBRARY</p>
+            <h1>音效素材库</h1>
+          </div>
+          <button id="themeToggle" class="icon-button" title="切换深色浅色">◐</button>
+        </div>
+
+        <div class="import-panel" id="dropZone">
+          <div class="drop-orbit"></div>
+          <strong>拖入文件或文件夹</strong>
+          <span>保留原始层级，只建立本地索引</span>
+          <div class="import-actions">
+            <button id="importFolderBtn">导入文件夹</button>
+            <button id="importFilesBtn" class="ghost">导入文件</button>
+          </div>
+        </div>
+
+        <div class="side-section">
+          <div class="section-title">
+            <span>素材层级</span>
+            <button id="collapseAllBtn" class="mini-button">收起</button>
+          </div>
+          <div id="folderTree" class="folder-tree empty-small">
+            <div id="folderMarquee" class="folder-marquee"></div>
+            <span>还没有导入素材</span>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <div class="search-wrap">
+            <span>⌕</span>
+            <input id="searchInput" placeholder="搜索文件名、路径或标签" />
+          </div>
+          <div class="top-actions">
+            <button id="duplicateScanBtn" class="ghost">相同音频识别</button>
+            <button id="clearFiltersBtn" class="ghost">清空筛选</button>
+          </div>
+        </header>
+
+        <section class="filters" id="filters"></section>
+
+        <section class="library-head">
+          <div>
+            <p class="eyebrow">BROWSER</p>
+            <h2>本地音效</h2>
+          </div>
+          <div class="stats">
+            <span id="statCount">0 个音效</span>
+            <select id="sortSelect" class="sort-select" title="排序方式">
+              <option value="added-desc">最近添加</option>
+              <option value="name-asc">文件名 A-Z</option>
+              <option value="name-desc">文件名 Z-A</option>
+              <option value="duration-asc">时长 短到长</option>
+              <option value="duration-desc">时长 长到短</option>
+              <option value="type-asc">格式</option>
+            </select>
+            <div class="column-toggle" aria-label="卡片列数">
+              <button data-columns="auto" class="active">自动</button>
+              <button data-columns="2">2</button>
+              <button data-columns="3">3</button>
+              <button data-columns="4">4</button>
+            </div>
+            <div class="view-toggle" aria-label="视图切换">
+              <button id="cardViewBtn" class="active">卡片</button>
+              <button id="listViewBtn">列表</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="tag-filter-strip" id="tagFilters"></section>
+
+        <section id="soundList" class="sound-list"></section>
+      </main>
+
+      <aside class="inspector">
+        <section class="preview-card">
+          <div class="preview-head">
+            <div>
+              <p class="eyebrow">PREVIEW</p>
+              <h2 id="previewTitle">选择一个音效</h2>
+            </div>
+            <button id="revealBtn" class="icon-button" title="在文件夹中显示">⌁</button>
+          </div>
+          <div class="wave-large-wrap" id="largeWaveWrap">
+            <canvas id="largeWave" width="640" height="210"></canvas>
+            <div id="emptyWave" class="empty-wave">真实波形会显示在这里</div>
+          </div>
+          <div class="transport">
+            <button id="playBtn" class="play-button">▶</button>
+            <div class="time-readout">
+              <span id="currentTime">00:00.000</span>
+              <span id="durationTime">00:00.000</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="detail-panel">
+          <div class="section-title">
+            <span>自定义标签</span>
+          </div>
+          <div class="tag-editor">
+            <textarea id="tagInput" rows="2" placeholder="输入标签，回车添加；多个标签可用空格或逗号分隔"></textarea>
+            <div id="customTags" class="tag-cloud"></div>
+          </div>
+        </section>
+
+        <section class="detail-panel">
+          <div class="section-title">
+            <span>识别筛选</span>
+          </div>
+          <div id="analysisGrid" class="analysis-grid"></div>
+        </section>
+
+        <section class="detail-panel">
+          <div class="section-title">
+            <span>文件信息</span>
+          </div>
+          <dl class="file-meta">
+            <dt>路径</dt>
+            <dd id="metaPath">-</dd>
+            <dt>层级</dt>
+            <dd id="metaFolder">-</dd>
+            <dt>格式</dt>
+            <dd id="metaFormat">-</dd>
+            <dt>状态</dt>
+            <dd id="metaStatus">-</dd>
+          </dl>
+        </section>
+
+        <section class="detail-panel">
+          <div class="section-title">
+            <span>库与缓存</span>
+          </div>
+          <div class="cache-panel">
+            <div class="cache-row">
+              <span>素材库</span>
+              <strong>本地索引</strong>
+            </div>
+            <p id="libraryPath" class="cache-path">-</p>
+            <div class="cache-row">
+              <span>波形缓存</span>
+              <strong id="cacheSize">计算中</strong>
+            </div>
+            <p id="cachePath" class="cache-path">-</p>
+            <div class="cache-actions">
+              <button id="chooseLibraryBtn" class="ghost">更改库位置</button>
+              <button id="chooseCacheBtn" class="ghost">仅更改缓存</button>
+              <button id="clearCacheBtn" class="ghost">清理缓存</button>
+            </div>
+          </div>
+        </section>
+      </aside>
+
+      <div id="contextMenu" class="context-menu">
+        <button data-action="favorite">加入收藏</button>
+        <button data-action="reveal">在文件夹中显示</button>
+        <button data-action="copyPath">复制文件路径</button>
+        <button data-action="importResolve">导入到达芬奇媒体池</button>
+        <button data-action="moveToFolder">移动到当前归类目录</button>
+        <button data-action="remove">从素材库移除</button>
+      </div>
+
+      <div id="folderContextMenu" class="context-menu">
+        <button data-folder-action="checkMissing">检查缺失文件</button>
+        <button data-folder-action="new">新建归类目录</button>
+        <button data-folder-action="rename">重命名目录</button>
+        <button data-folder-action="delete">移除目录</button>
+      </div>
+
+      <div id="nameDialog" class="modal-backdrop">
+        <div class="name-dialog">
+          <h3 id="nameDialogTitle">新建目录</h3>
+          <input id="nameDialogInput" placeholder="输入名称" />
+          <div class="dialog-actions">
+            <button id="nameCancelBtn" class="ghost">取消</button>
+            <button id="nameConfirmBtn">确认</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="duplicateDialog" class="modal-backdrop duplicate-dialog-backdrop">
+        <div class="duplicate-dialog">
+          <header class="duplicate-dialog-head">
+            <div>
+              <p class="eyebrow">DUPLICATE CHECK</p>
+              <h3 id="duplicateDialogTitle">相同音频识别</h3>
+            </div>
+            <button id="duplicateCloseBtn" class="icon-button" title="关闭">×</button>
+          </header>
+          <div class="duplicate-dialog-body">
+            <aside id="duplicateGroupList" class="duplicate-group-list"></aside>
+            <main class="duplicate-preview-panel">
+              <div id="duplicatePreviewEmpty" class="duplicate-preview-empty">没有发现相同音频</div>
+              <div id="duplicatePreviewContent" class="duplicate-preview-content">
+                <div class="duplicate-preview-head">
+                  <div>
+                    <span id="duplicateGroupCount">0 个相同音频</span>
+                    <strong id="duplicateGroupName">-</strong>
+                  </div>
+                  <button id="duplicateKeepOldestBtn" class="mini-button">保留最早</button>
+                </div>
+                <div id="duplicateCandidates" class="duplicate-candidates"></div>
+              </div>
+            </main>
+          </div>
+        </div>
+      </div>
+
+      <div id="workOverlay" class="work-overlay" aria-live="polite">
+        <div class="work-dialog">
+          <div class="work-pulse"></div>
+          <p class="eyebrow">BUILDING LOCAL INDEX</p>
+          <h3 id="workTitle">正在建立素材库缓存</h3>
+          <p id="workMessage">请稍候，当前暂时不能操作素材库</p>
+          <div class="work-progress">
+            <div id="workProgressBar"></div>
+          </div>
+          <div id="workProgressText" class="work-progress-text">准备中</div>
+        </div>
+      </div>
+
+      <div id="toast" class="toast"></div>
+    </div>
+    <script src="./app.js"></script>
+  </body>
+</html>

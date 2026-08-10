@@ -32,7 +32,16 @@ jobs:
           git config user.email "codex@openai.invalid"
           git add -A
           if git diff --cached --quiet; then
-            exit 0
+            if [ "$(git log -1 --format=%an)" = "OpenAI Codex" ]; then
+              exit 0
+            fi
+            git commit --allow-empty -m "Finalize SoundLibraryManager 1.0.0 source"
+          else
+            git commit -m "Import complete SoundLibraryManager 1.0.0 source"
           fi
-          git commit -m "Import complete SoundLibraryManager 1.0.0 source"
           git push origin HEAD:main
+
+      - name: Point release tag at complete source
+        run: |
+          git tag --force v1.0.0 HEAD
+          git push --force origin refs/tags/v1.0.0

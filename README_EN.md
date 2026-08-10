@@ -10,8 +10,8 @@ The application works entirely offline. It requires no account, uploads no data,
 
 Regular users do not need Node.js or the source code. Download the package for your system from [Releases](https://github.com/wNe233/SoundLibraryManager/releases):
 
-- macOS Apple Silicon: download the `mac-arm64.dmg` package
-- Windows x64: download the `win-x64.exe` package
+- macOS Apple Silicon: download `SoundLibraryManager-1.0.0-mac-arm64.dmg`
+- Windows x64: download `SoundLibraryManager-1.0.0-win-x64-ready.zip`, extract it, and run `SoundLibraryManager.exe`
 
 The current packages are not commercially code-signed. On first launch, macOS may require approval under System Settings -> Privacy & Security. Windows SmartScreen may show an unknown publisher warning.
 

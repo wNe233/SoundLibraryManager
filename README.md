@@ -10,8 +10,8 @@ SoundLibraryManager 是一款面向剪辑师和音频从业者的跨平台本地
 
 普通用户不需要安装 Node.js，也不需要下载源码。请前往 [Releases](https://github.com/wNe233/SoundLibraryManager/releases) 下载对应系统的安装包：
 
-- macOS Apple Silicon：下载 `mac-arm64.dmg`
-- Windows x64：下载 `win-x64.exe`
+- macOS Apple Silicon：下载 `SoundLibraryManager-1.0.0-mac-arm64.dmg`
+- Windows x64：下载 `SoundLibraryManager-1.0.0-win-x64-ready.zip`，解压后运行 `SoundLibraryManager.exe`
 
 当前发布包没有商业代码签名。macOS 首次打开时可能需要在“系统设置 -> 隐私与安全性”中允许；Windows SmartScreen 可能提示未知发布者。
 

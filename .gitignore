@@ -1,0 +1,16 @@
+.DS_Store
+node_modules/
+dist/
+.cache/
+*.log
+
+build/*
+!build/icon.png
+!build/icon.ico
+!build/icon.icns
+!build/icon.iconset/
+!build/icon.iconset/**
+
+native/file-drag/build/
+docs/rendered-*/
+docs/quicklook-preview/

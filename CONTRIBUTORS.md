@@ -1,6 +1,6 @@
 # Contributors
 
 - wNe233：产品方向、剪辑工作流定义、设计反馈、跨平台测试与发布验证
-- [OpenAI Codex](https://github.com/apps/openai-codex)：产品设计、界面实现、Electron 与原生拖拽开发、性能优化、跨平台构建与技术文档
+- OpenAI Codex：产品设计、界面实现、Electron 与原生拖拽开发、性能优化、跨平台构建与技术文档
 
 项目通过持续沟通和真实剪辑场景测试完成，功能取舍、交互细节和技术路线均由多轮反馈共同推动。

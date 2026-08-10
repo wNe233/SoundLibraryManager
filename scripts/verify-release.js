@@ -27,6 +27,7 @@ if (missing.length) {
 
 const mainSource = fs.readFileSync(path.join(root, 'src/main.js'), 'utf8');
 const rendererSource = fs.readFileSync(path.join(root, 'src/renderer/app.js'), 'utf8');
+const windowsNative = fs.readFileSync(path.join(root, 'native/file-drag/prebuilds/win32-x64/native_file_drag.node'));
 if (!mainSource.includes("['darwin', 'win32'].includes(process.platform)")) {
   throw new Error('主进程没有同时启用 macOS 和 Windows 原生拖拽');
 }
@@ -38,6 +39,24 @@ if (!rendererSource.includes('renderLimit') || !rendererSource.includes('folderC
 }
 if (!rendererSource.includes('state.audio && target && state.audio.dataset.id === target.id')) {
   throw new Error('空素材库播放控件保护未包含在发布源码中');
+}
+const windowsNativeText = windowsNative.toString('latin1');
+if (/([A-Za-z]:\\Users\\|\\Desktop\\|\\Downloads\\)/i.test(windowsNativeText)) {
+  throw new Error('Windows 原生模块包含本机用户目录或构建路径');
+}
+
+const sourceFiles = [
+  'package.json',
+  'README.md',
+  'README_EN.md',
+  ...fs.readdirSync(path.join(root, 'scripts')).map((name) => `scripts/${name}`)
+].filter((relativePath) => fs.existsSync(path.join(root, relativePath)));
+const forbiddenPersonalIds = new RegExp(`yu${'anquan'}|\\u8881\\u6cc9|/Users/yu${'anquan'}`, 'i');
+for (const relativePath of sourceFiles) {
+  const content = fs.readFileSync(path.join(root, relativePath), 'utf8');
+  if (forbiddenPersonalIds.test(content)) {
+    throw new Error(`发布源码包含不应公开的个人标识：${relativePath}`);
+  }
 }
 
 console.log('Release verification passed: 1.0.0, macOS arm64, Windows x64.');

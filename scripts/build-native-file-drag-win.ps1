@@ -102,6 +102,10 @@ if ($exitCode -ne 0) {
 }
 New-Item -ItemType Directory -Force -Path $PrebuildDir | Out-Null
 Copy-Item (Join-Path $ModuleDir "build\Release\native_file_drag.node") $OutputFile -Force
+& node (Join-Path $Root "scripts\sanitize-native-binary.js") $OutputFile
+if ($LASTEXITCODE -ne 0) {
+  throw "Could not remove local build paths from native_file_drag.node."
+}
 Write-Host "Built native drag module: $OutputFile"
 
 if (-not (Test-Path $OutputFile)) {

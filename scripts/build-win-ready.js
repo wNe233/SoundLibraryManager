@@ -46,11 +46,11 @@ function updateExecutable(executablePath) {
     version.setProductVersion(1, 0, 0, 0);
     for (const language of targets) {
       version.setStringValues(language, {
-        CompanyName: 'Yuanquan & OpenAI Codex',
+        CompanyName: 'wNe233 & OpenAI Codex',
         FileDescription: '本地音效素材库管理器',
         FileVersion: pkg.version,
         InternalName: 'SoundLibraryManager',
-        LegalCopyright: 'Copyright (c) 2026 Yuanquan and OpenAI Codex',
+        LegalCopyright: 'Copyright (c) 2026 wNe233 and OpenAI Codex',
         OriginalFilename: 'SoundLibraryManager.exe',
         ProductName: 'SoundLibraryManager',
         ProductVersion: pkg.version
@@ -108,6 +108,7 @@ execFileSync(process.execPath, [asarCli, 'pack', appStaging, path.join(staging, 
 const nativeTarget = path.join(staging, 'resources', 'native', 'file-drag');
 fs.mkdirSync(nativeTarget, { recursive: true });
 fs.copyFileSync(path.join(root, 'native', 'file-drag', 'index.js'), path.join(nativeTarget, 'index.js'));
+execFileSync(process.execPath, [path.join(root, 'scripts', 'sanitize-native-binary.js'), path.join(root, 'native', 'file-drag', 'prebuilds', 'win32-x64', 'native_file_drag.node')]);
 copyDir(path.join(root, 'native', 'file-drag', 'prebuilds'), path.join(nativeTarget, 'prebuilds'));
 
 updateExecutable(productExe);

@@ -348,8 +348,12 @@ function startInProcessNativeFileDrag(filePath) {
 }
 
 function writeNativeDragLog(message) {
+  if (process.env.SOUND_LIBRARY_DEBUG_LOG !== '1') return;
   try {
-    const line = `[${new Date().toISOString()}] ${process.platform}/${process.arch} packaged=${app.isPackaged} ${message}\n`;
+    const sanitized = String(message)
+      .replace(/[A-Za-z]:\\[^\r\n]*/g, '[path]')
+      .replace(/\/Users\/[^\r\n]*/g, '[path]');
+    const line = `[${new Date().toISOString()}] ${process.platform}/${process.arch} packaged=${app.isPackaged} ${sanitized}\n`;
     fsSync.appendFileSync(path.join(app.getPath('userData'), 'native-drag-runtime.log'), line, 'utf8');
   } catch {}
 }
@@ -507,6 +511,7 @@ print("OK")
         PYTHONPATH: modulePaths.filter(Boolean).join(path.delimiter)
       }
     }, (error, stdout, stderr) => {
+      fs.unlink(scriptPath).catch(() => {});
       if (error) {
         resolve({ ok: false, message: stderr.trim() || error.message });
         return;

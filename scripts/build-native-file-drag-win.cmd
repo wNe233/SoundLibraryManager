@@ -89,6 +89,12 @@ if errorlevel 1 (
   exit /b 1
 )
 
+node ".\scripts\sanitize-native-binary.js" "%OUTPUT_FILE%"
+if errorlevel 1 (
+  echo FAILED: Could not remove local build paths from native_file_drag.node.
+  exit /b 1
+)
+
 echo Built native drag module: %OUTPUT_FILE%
 echo SUCCESS: native drag module is ready.
 exit /b 0

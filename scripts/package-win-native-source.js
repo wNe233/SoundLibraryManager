@@ -30,7 +30,7 @@ copyDir(path.join(root, 'build'), path.join(staging, 'build'), {
   exclude: [/^win-app-staging$/, /^win-native-package$/, /^tmp$/]
 });
 fs.mkdirSync(path.join(staging, 'scripts'), { recursive: true });
-for (const script of ['build-native-file-drag-win.ps1', 'update-win-unpacked.js']) {
+for (const script of ['build-native-file-drag-win.ps1', 'sanitize-native-binary.js', 'update-win-unpacked.js']) {
   fs.copyFileSync(path.join(root, 'scripts', script), path.join(staging, 'scripts', script));
 }
 fs.copyFileSync(path.join(root, 'scripts', 'build-native-file-drag-win.cmd'), path.join(staging, 'scripts', 'build-native-file-drag-win.cmd'));
